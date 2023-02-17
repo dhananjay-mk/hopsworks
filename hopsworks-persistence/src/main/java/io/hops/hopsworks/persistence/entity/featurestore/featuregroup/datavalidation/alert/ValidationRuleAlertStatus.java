@@ -16,6 +16,7 @@
 package io.hops.hopsworks.persistence.entity.featurestore.featuregroup.datavalidation.alert;
 
 import io.hops.hopsworks.persistence.entity.featurestore.featuregroup.datavalidation.FeatureGroupValidationStatus;
+import io.hops.hopsworks.persistence.entity.featurestore.featuregroup.featureMonitoring.alert.FeatureMonitorStatus;
 
 import javax.xml.bind.annotation.XmlEnum;
 
@@ -23,7 +24,10 @@ import javax.xml.bind.annotation.XmlEnum;
 public enum ValidationRuleAlertStatus {
   SUCCESS("Success"),
   WARNING("Warning"),
-  FAILURE("Failure");
+  FAILURE("Failure"),
+  FM_ENABLED("FM_ENABLED"),
+  FM_SUCCESS("FM_SUCCESS"),
+  FM_FAILURE("FM_FAILURE");
 
   private final String name;
 
@@ -47,6 +51,19 @@ public enum ValidationRuleAlertStatus {
         return ValidationRuleAlertStatus.SUCCESS;
       case WARNING:
         return ValidationRuleAlertStatus.WARNING;
+      default:
+        throw new IllegalArgumentException("Invalid enum constant");//will happen if status is none
+    }
+  }
+  
+  public static ValidationRuleAlertStatus getStatus(FeatureMonitorStatus status) {
+    switch (status) {
+      case FAILURE:
+        return ValidationRuleAlertStatus.FM_FAILURE;
+      case SUCCESS:
+        return ValidationRuleAlertStatus.FM_SUCCESS;
+      case ENABLED:
+        return ValidationRuleAlertStatus.FM_ENABLED;
       default:
         throw new IllegalArgumentException("Invalid enum constant");//will happen if status is none
     }

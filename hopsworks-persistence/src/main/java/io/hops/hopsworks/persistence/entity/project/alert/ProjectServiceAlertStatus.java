@@ -16,6 +16,7 @@
 package io.hops.hopsworks.persistence.entity.project.alert;
 
 import io.hops.hopsworks.persistence.entity.featurestore.featuregroup.datavalidation.FeatureGroupValidationStatus;
+import io.hops.hopsworks.persistence.entity.featurestore.featuregroup.featureMonitoring.alert.FeatureMonitorStatus;
 import io.hops.hopsworks.persistence.entity.jobs.configuration.history.JobFinalStatus;
 import io.hops.hopsworks.persistence.entity.jobs.configuration.history.JobState;
 
@@ -27,7 +28,11 @@ public enum ProjectServiceAlertStatus {
   //Job
   JOB_FINISHED("Finished"),
   JOB_FAILED("Failed"),
-  JOB_KILLED("Killed");
+  JOB_KILLED("Killed"),
+  FEATURE_MONITOR_ENABLED("FM_ENABLED"),
+  FEATURE_MONITOR_SUCCESS("FM_SUCCESS"),
+  FEATURE_MONITORING_ENABLED("FM_FAILURE");
+  
 
   private final String name;
 
@@ -104,6 +109,19 @@ public enum ProjectServiceAlertStatus {
         return true;
       default:
         return false;
+    }
+  }
+  
+  public static ProjectServiceAlertStatus getFeatureMonitorStatus(FeatureMonitorStatus status) {
+    switch (status) {
+      case ENABLED:
+        return ProjectServiceAlertStatus.FEATURE_MONITORING_ENABLED;
+      case SUCCESS:
+        return ProjectServiceAlertStatus.FEATURE_MONITOR_SUCCESS;
+      case FAILURE:
+        return ProjectServiceAlertStatus.FEATURE_MONITORING_ENABLED;
+      default:
+        throw new IllegalArgumentException("Invalid enum constant");//will happen if JobState is not final state
     }
   }
 
