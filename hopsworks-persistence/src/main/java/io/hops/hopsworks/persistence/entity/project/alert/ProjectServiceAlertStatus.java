@@ -31,7 +31,7 @@ public enum ProjectServiceAlertStatus {
   JOB_KILLED("Killed"),
   FEATURE_MONITOR_ENABLED("FM_ENABLED"),
   FEATURE_MONITOR_SUCCESS("FM_SUCCESS"),
-  FEATURE_MONITORING_ENABLED("FM_FAILURE");
+  FEATURE_MONITOR_FAILURE("FM_FAILURE");
   
 
   private final String name;
@@ -106,6 +106,9 @@ public enum ProjectServiceAlertStatus {
       case VALIDATION_FAILURE:
       case VALIDATION_SUCCESS:
       case VALIDATION_WARNING:
+      case FEATURE_MONITOR_ENABLED:
+      case FEATURE_MONITOR_SUCCESS:
+      case FEATURE_MONITOR_FAILURE:
         return true;
       default:
         return false;
@@ -115,11 +118,11 @@ public enum ProjectServiceAlertStatus {
   public static ProjectServiceAlertStatus getFeatureMonitorStatus(FeatureMonitorStatus status) {
     switch (status) {
       case ENABLED:
-        return ProjectServiceAlertStatus.FEATURE_MONITORING_ENABLED;
+        return ProjectServiceAlertStatus.FEATURE_MONITOR_ENABLED;
       case SUCCESS:
         return ProjectServiceAlertStatus.FEATURE_MONITOR_SUCCESS;
       case FAILURE:
-        return ProjectServiceAlertStatus.FEATURE_MONITORING_ENABLED;
+        return ProjectServiceAlertStatus.FEATURE_MONITOR_FAILURE;
       default:
         throw new IllegalArgumentException("Invalid enum constant");//will happen if JobState is not final state
     }

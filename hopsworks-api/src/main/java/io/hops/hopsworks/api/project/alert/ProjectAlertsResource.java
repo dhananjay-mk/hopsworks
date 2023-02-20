@@ -323,7 +323,7 @@ public class ProjectAlertsResource {
         "Alert receiver not found " + name);
   }
 
-  private void createRoute(ProjectServiceAlert projectServiceAlert) throws ProjectException {
+  private void  createRoute(ProjectServiceAlert projectServiceAlert) throws ProjectException {
     try {
       alertController.createRoute(projectServiceAlert);
     } catch ( AlertManagerClientCreateException | AlertManagerConfigReadException |
