@@ -413,7 +413,7 @@ public class FeaturestoreStorageConnectorController {
       return;
     }
     FeaturestoreConnector featurestoreConnector = featurestoreConnectorOptional.get();
-    restrictDefaultConnectors(project, connectorName, featurestoreConnector);
+
     if (!storageConnectorUtil.isStorageConnectorTypeEnabled(featurestoreConnector.getConnectorType())){
       throw new FeaturestoreException(RESTCodes.FeaturestoreErrorCode.STORAGE_CONNECTOR_TYPE_NOT_ENABLED, Level.FINE,
               "Storage connector type '" + featurestoreConnector.getConnectorType() + "' is not enabled");
@@ -429,30 +429,6 @@ public class FeaturestoreStorageConnectorController {
     activityFacade.persistActivity(
         ActivityFacade.REMOVED_FEATURESTORE_STORAGE_CONNECTOR + featurestoreConnector.getName(),
         project, user, ActivityFlag.SERVICE);
-  }
-  
-  private void restrictDefaultConnectors(Project project, String connectorName,
-    FeaturestoreConnector featurestoreConnector)
-    throws FeaturestoreException {
-    boolean invalid = false;
-    switch (featurestoreConnector.getConnectorType()) {
-      case HOPSFS:
-        String td_connector = project.getName() + "_" + Settings.ServiceDataset.TRAININGDATASETS.getName();
-        if (connectorName.equalsIgnoreCase(td_connector)) {
-          invalid = true;
-        }
-        break;
-      case JDBC:
-        if (connectorName.startsWith(project.getName()) &&
-          connectorName.endsWith(FeaturestoreConstants.ONLINE_FEATURE_STORE_CONNECTOR_SUFFIX)) {
-          invalid= true;
-        }
-        break;
-    }
-    if (invalid) {
-      throw new FeaturestoreException(RESTCodes.FeaturestoreErrorCode.ILLEGAL_STORAGE_CONNECTOR_ARG, Level.FINE,
-        "Default storage connectors cannot be deleted");
-    }
   }
   
   public FeaturestoreStorageConnectorDTO getOnlineFeaturestoreConnector(Users user, Project userProject)
